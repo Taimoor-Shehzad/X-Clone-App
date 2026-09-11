@@ -8,7 +8,7 @@ export default function SsoCallback() {
   if (isLoaded) {
     if (isSignedIn) {
       // Redirect to home screen once session is active
-      return <Redirect href="/(root)/home" />; // Adjust path if your route is "/home"
+      return <Redirect href="./(tabs)/home" />; // Adjust path if your route is "/home"
     }
   }
 
