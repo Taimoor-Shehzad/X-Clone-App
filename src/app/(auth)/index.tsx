@@ -61,7 +61,7 @@ const Index = () => {
           By signing up, you agree to our{" "}
           <Text className="text-blue-500">Terms</Text>
           {", "}
-          <Text className="text-blue-500">Privacy Polic</Text>
+          <Text className="text-blue-500">Privacy Policy</Text>
           {", and "}
           <Text className="text-blue-500">Cookie Use</Text>.
         </Text>
