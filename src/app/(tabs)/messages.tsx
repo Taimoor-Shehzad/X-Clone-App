@@ -1,18 +1,38 @@
+import { Feather, Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { useState } from "react";
 import {
-  View,
+  Modal,
+  ScrollView,
   Text,
   TextInput,
-  ScrollView,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { Image } from "expo-image";
-import { Feather, Ionicons } from "@expo/vector-icons";
-import { CONVERSATIONS } from "../../../data/conversations";
-import { useState } from "react";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { CONVERSATIONS, ConversationType } from "../../../data/conversations";
 
 const messages = () => {
   const [conversations, setConversation] = useState(CONVERSATIONS);
   const [searchText, setSearchText] = useState("");
+  const [isChatOpen, setChatOpen] = useState(false);
+  const [selectedConversation, setSelectedConversation] =
+    useState<null | ConversationType>(null);
+  const [newMessage, setNewMessage] = useState("");
+
+  const insets = useSafeAreaInsets();
+
+  const openChatModel = (conversations: ConversationType) => {
+    setChatOpen(true);
+    setSelectedConversation(conversations);
+  };
+  const closeChatModel = () => {
+    setChatOpen(false);
+    setSelectedConversation(null);
+  };
 
   return (
     <View className="bg-white pt-12 flex-1">
@@ -40,6 +60,9 @@ const messages = () => {
           <TouchableOpacity
             key={item.id}
             className="flex-row px-5 py-4 w-full gap-3 items-center border-b border-b-gray-100"
+            onPress={() => {
+              openChatModel(item);
+            }}
           >
             <Image
               contentFit="cover"
@@ -76,6 +99,122 @@ const messages = () => {
           Tap to open • Long press to delete
         </Text>
       </View>
+      <Modal
+        visible={isChatOpen}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        style={{
+          marginTop: 70 + insets.top,
+          borderTopRightRadius: 15,
+          borderTopLeftRadius: 15,
+          padding: 10,
+        }}
+      >
+        {selectedConversation && (
+          <SafeAreaView style={{ flex: 1 }}>
+            <View className="flex-row items-center gap-3 border-b border-b-gray-100 pb-4">
+              <TouchableOpacity
+                onPress={() => {
+                  closeChatModel();
+                }}
+              >
+                <Ionicons name="arrow-back" color="#1DA1F2" size={26} />
+              </TouchableOpacity>
+              <Image
+                source={selectedConversation?.user.avatar}
+                style={{
+                  height: 37,
+                  width: 37,
+                  borderRadius: 18.5,
+                  overflow: "hidden",
+                }}
+                contentFit="cover"
+              />
+              <View>
+                <View className="flex-row gap-1 justify-center items-center">
+                  <Text className="text-lg font-bold leading-tight">
+                    {selectedConversation?.user.name}
+                  </Text>
+                  {selectedConversation.user.verified && (
+                    <Feather name="check-circle" size={16} color="#1DA1F2" />
+                  )}
+                </View>
+                <Text className="text-base text-gray-500 leading-tight justify-center items-center">
+                  @{selectedConversation?.user.username}
+                </Text>
+              </View>
+            </View>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              className="flex-1 px-4 py-4"
+            >
+              <Text className="text-center mt-2 text-gray-500 text-sm mb-4">
+                This is the beginning of your conversation with{" "}
+                {selectedConversation.user.name}
+              </Text>
+              {selectedConversation.messages.map((message) => (
+                <View
+                  className={`flex-row mb-3 ${message.fromUser ? "justify-end" : "justify-start"} gap-2 items-start`}
+                  key={message.id}
+                >
+                  {!message.fromUser && (
+                    <Image
+                      source={selectedConversation?.user.avatar}
+                      style={{
+                        height: 30,
+                        width: 30,
+                        borderRadius: 15,
+                        overflow: "hidden",
+                      }}
+                      contentFit="cover"
+                    />
+                  )}
+                  <View
+                    className={`flex-1 ${message.fromUser ? "items-end" : ""}`}
+                  >
+                    <View
+                      className={`rounded-2xl px-4 py-3 max-w-xs ${
+                        message.fromUser ? "bg-blue-500" : "bg-gray-100"
+                      }`}
+                    >
+                      <Text
+                        className={
+                          message.fromUser ? "text-white" : "text-gray-900"
+                        }
+                      >
+                        {message.text}
+                      </Text>
+                    </View>
+                    <Text className="text-xs text-gray-500 mt-1 mr-1">
+                      {message.time}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+            <View className="flex-row items-center px-4 py-3 border-t border-gray-100">
+              <View className="flex-1 flex-row items-center bg-gray-100 rounded-full px-4 py-2 mr-3">
+                <TextInput
+                  className="flex-1 text-base"
+                  placeholder="Send a message..."
+                  placeholderTextColor="#657786"
+                  value={newMessage}
+                  onChangeText={setNewMessage}
+                  multiline
+                />
+              </View>
+              <TouchableOpacity
+                className={`size-10 rounded-full items-center justify-center ${
+                  newMessage.trim() ? "bg-blue-500" : "bg-gray-300"
+                }`}
+                disabled={!newMessage.trim()}
+              >
+                <Feather name="send" size={20} color="white" />
+              </TouchableOpacity>
+            </View>
+          </SafeAreaView>
+        )}
+      </Modal>
     </View>
   );
 };
