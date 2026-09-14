@@ -2,6 +2,7 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useState } from "react";
 import {
+  Alert,
   Modal,
   ScrollView,
   Text,
@@ -16,7 +17,7 @@ import {
 import { CONVERSATIONS, ConversationType } from "../../../data/conversations";
 
 const messages = () => {
-  const [conversations, setConversation] = useState(CONVERSATIONS);
+  const [conversations, setConversations] = useState(CONVERSATIONS);
   const [searchText, setSearchText] = useState("");
   const [isChatOpen, setChatOpen] = useState(false);
   const [selectedConversation, setSelectedConversation] =
@@ -32,6 +33,42 @@ const messages = () => {
   const closeChatModel = () => {
     setChatOpen(false);
     setSelectedConversation(null);
+  };
+
+  const deleteConversation = (conversationId: number) => {
+    Alert.alert(
+      "Delete",
+      "Are you sure you want to delete this conversation?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            setConversations((prev) =>
+              prev.filter((conv) => conv.id !== conversationId),
+            );
+          },
+        },
+      ],
+    );
+  };
+
+  const sendMessage = () => {
+    if (newMessage.trim() && selectedConversation) {
+      setConversations((prev) =>
+        prev.map((conv) =>
+          conv.id === selectedConversation.id
+            ? { ...conv, lastMessage: newMessage, time: "now" }
+            : conv,
+        ),
+      );
+      setNewMessage("");
+      Alert.alert(
+        "Message Sent!",
+        `Your message has been sent to ${selectedConversation.user.name}`,
+      );
+    }
   };
 
   return (
@@ -62,6 +99,9 @@ const messages = () => {
             className="flex-row px-5 py-4 w-full gap-3 items-center border-b border-b-gray-100"
             onPress={() => {
               openChatModel(item);
+            }}
+            onLongPress={() => {
+              deleteConversation(item.id);
             }}
           >
             <Image
@@ -208,6 +248,9 @@ const messages = () => {
                   newMessage.trim() ? "bg-blue-500" : "bg-gray-300"
                 }`}
                 disabled={!newMessage.trim()}
+                onPress={() => {
+                  sendMessage();
+                }}
               >
                 <Feather name="send" size={20} color="white" />
               </TouchableOpacity>

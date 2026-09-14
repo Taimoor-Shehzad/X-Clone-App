@@ -1,10 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import {
-  View,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
+  View,
 } from "react-native";
 
 const TRENDING_TOPICS = [
@@ -19,7 +19,7 @@ const TRENDING_TOPICS = [
 const search = () => {
   return (
     <View className="flex-1 px-5 pt-14 gap-5 bg-white">
-      <View className="w-full bg-gray-300 rounded-full px-4 flex-row items-center gap-1">
+      <View className="w-full bg-gray-100 rounded-full px-4 flex-row items-center gap-1">
         <Ionicons name="search" size={20} color={"#657786"} />
         <TextInput
           className="w-full color-black"
