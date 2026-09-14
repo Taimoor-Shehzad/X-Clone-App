@@ -29,8 +29,12 @@ export default function AuthRoutesLayout() {
         name="home"
         options={{
           title: "",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
@@ -38,8 +42,12 @@ export default function AuthRoutesLayout() {
         name="messages"
         options={{
           title: "",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="mail-outline" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "mail" : "mail-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
@@ -47,8 +55,12 @@ export default function AuthRoutesLayout() {
         name="notifications"
         options={{
           title: "",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="notifications-outline" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "notifications" : "notifications-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
@@ -56,8 +68,12 @@ export default function AuthRoutesLayout() {
         name="search"
         options={{
           title: "",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search-outline" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "search" : "search-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
@@ -65,8 +81,12 @@ export default function AuthRoutesLayout() {
         name="profile"
         options={{
           title: "",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "person" : "person-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
