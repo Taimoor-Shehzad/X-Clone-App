@@ -52,7 +52,6 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
         padding: 10,
         paddingBottom: insets.bottom,
       }}
-      onRequestClose={handleClose}
     >
       <View className="w-full flex-row items-center justify-center relative mb-2">
         <TouchableOpacity
