@@ -5,7 +5,7 @@ export const useCurrentUser = () => {
   const api = useApiClient();
   const {
     data: currentUser,
-    isLoading,
+    isLoading: isUserLoading,
     error,
     refetch,
   } = useQuery({
@@ -13,5 +13,5 @@ export const useCurrentUser = () => {
     queryFn: () => userApi.getCurrentUser(api),
     select: (response) => response.data.user,
   });
-  return { currentUser, isLoading, error, refetch };
+  return { currentUser, isUserLoading, error, refetch };
 };

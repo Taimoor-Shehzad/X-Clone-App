@@ -31,6 +31,14 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
     setCommentText("");
   };
 
+  let fullName, displayName: any;
+
+  if (selectedPost) {
+    fullName = `${selectedPost.user.firstName} ${selectedPost.user.lastName}`;
+    displayName =
+      fullName.length > 15 ? `${fullName.slice(0, 15)}...` : fullName;
+  }
+
   return (
     <Modal
       visible={!!selectedPost}
@@ -43,6 +51,7 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
         padding: 10,
         paddingBottom: insets.bottom,
       }}
+      onRequestClose={handleClose}
     >
       <View className="w-full flex-row items-center justify-center relative mb-2">
         <TouchableOpacity
@@ -59,6 +68,7 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {selectedPost && (
           <>
+            {}
             <View className="px-1 border-b border-t py-3 border-b-gray-100 border-t-gray-100">
               <View className="flex-row gap-3">
                 <Image
@@ -72,8 +82,7 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
                   <View className="flex-row justify-between items-center">
                     <View className="flex-row gap-1 items-center">
                       <Text className="text-lg font-extrabold leading-tight">
-                        {selectedPost.user.firstName}{" "}
-                        {selectedPost.user.lastName}
+                        {displayName}
                       </Text>
                       <Text className="text-sm text-gray-500">
                         @{selectedPost.user.username}
@@ -123,7 +132,7 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
                         <View className="flex-row justify-between items-center">
                           <View className="flex-row gap-1 items-center">
                             <Text className="text-lg font-extrabold leading-tight">
-                              {comment.user.firstName} {comment.user.lastName}
+                              {displayName}
                             </Text>
                             <Text className="text-sm text-gray-500">
                               @{comment.user.username}

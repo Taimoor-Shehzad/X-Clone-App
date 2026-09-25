@@ -25,14 +25,14 @@ const PostList = () => {
     isLoading,
     checkIsLiked,
   } = usePosts();
-  const { currentUser } = useCurrentUser();
+  const { currentUser, isUserLoading } = useCurrentUser();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   let selectedPost = selectedPostId
     ? posts.find((p: Post) => p._id === selectedPostId)
     : null;
 
-  if (isLoading) {
+  if (isLoading || isUserLoading || !currentUser) {
     return (
       <View className="w-full items-center justify-center mt-18">
         <ActivityIndicator size="large" color="#1DA1F2" />
