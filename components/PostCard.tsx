@@ -32,6 +32,9 @@ const PostCard = ({
       },
     ]);
   };
+  const fullName = `${post.user.firstName} ${post.user.lastName}`;
+  const displayName =
+    fullName.length > 15 ? `${fullName.slice(0, 15)}...` : fullName;
 
   return (
     <View className="px-1 border-b py-3 border-b-gray-100">
@@ -47,7 +50,7 @@ const PostCard = ({
           <View className="flex-row justify-between items-center">
             <View className="flex-row gap-1 items-center">
               <Text className="text-lg font-extrabold leading-tight">
-                {post.user.firstName} {post.user.lastName}
+                {displayName}
               </Text>
               <Text className="text-sm text-gray-500">
                 @{post.user.username}
