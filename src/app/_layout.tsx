@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import SafeScreen from "../../components/SafeScreen";
 import "../../global.css";
+import { StatusBar } from "react-native";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -23,6 +24,7 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           </Stack>
         </SafeScreen>
+        <StatusBar barStyle={"dark-content"} />
       </QueryClientProvider>
     </ClerkProvider>
   );
