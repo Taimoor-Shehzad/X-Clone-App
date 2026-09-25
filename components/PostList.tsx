@@ -44,13 +44,27 @@ const PostList = () => {
   if (error) {
     return (
       <View className="p-8 items-center">
-        <Text className="text-gray-500 mb-4">Failed to load posts</Text>
+        <Text className="text-gray-500 mb-4">
+          {userUnavailable ? "Failed to load user" : "Failed to load posts"}
+        </Text>
         <TouchableOpacity
           className="bg-blue-500 px-4 py-2 rounded-lg"
-          onPress={() => refetch()}
+          onPress={() => {
+            if (error) refetch();
+            if (userUnavailable) refetchCurrentUser();
+          }}
         >
           <Text className="text-white font-semibold">Retry</Text>
         </TouchableOpacity>
+      </View>
+    );
+  }
+
+  if (isLoading || isCurrentUserLoading || !currentUser) {
+    return (
+      <View className="w-full items-center justify-center mt-18">
+        <ActivityIndicator size="large" color="#1DA1F2" />
+        <Text className="text-gray-500 mt-6">Loading posts...</Text>
       </View>
     );
   }
