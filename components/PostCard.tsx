@@ -9,6 +9,7 @@ interface PostCardProps {
   onDelete: (postId: string) => void;
   isLiked?: boolean;
   currentUser: User;
+  onComment: (post: Post) => void;
 }
 
 const PostCard = ({
@@ -17,6 +18,7 @@ const PostCard = ({
   onLike,
   post,
   isLiked,
+  onComment,
 }: PostCardProps) => {
   const isOwnPost = post.user._id === currentUser._id;
 
@@ -91,7 +93,7 @@ const PostCard = ({
             <TouchableOpacity
               className="flex-row justify-center items-center"
               onPress={() => {
-                //  setCommentsOpened(true);
+                onComment(post);
               }}
             >
               <Ionicons name="chatbox-outline" color="gray" size={16} />

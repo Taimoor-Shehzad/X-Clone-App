@@ -4,11 +4,16 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Image,
+  TextInput,
+  Modal,
 } from "react-native";
 import { usePosts } from "../hooks/usePosts";
 import PostCard from "./PostCard";
 import { Post } from "../types/types";
 import { useCurrentUser } from "../hooks/useCurrentUser";
+import { useState } from "react";
+import CommentsModal from "./CommentsModal";
 
 const PostList = () => {
   const {
@@ -21,6 +26,11 @@ const PostList = () => {
     checkIsLiked,
   } = usePosts();
   const { currentUser } = useCurrentUser();
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+
+  let selectedPost = selectedPostId
+    ? posts.find((p: Post) => p._id === selectedPostId)
+    : null;
 
   if (isLoading) {
     return (
@@ -54,18 +64,28 @@ const PostList = () => {
   }
 
   return (
-    <ScrollView className="flex-1 w-full" showsVerticalScrollIndicator={false}>
-      {posts.map((post: Post) => (
-        <PostCard
-          key={post._id}
-          post={post}
-          onLike={toggleLike}
-          onDelete={deletePost}
-          isLiked={checkIsLiked(post.likes, currentUser)}
-          currentUser={currentUser}
-        />
-      ))}
-    </ScrollView>
+    <>
+      <ScrollView
+        className="flex-1 w-full"
+        showsVerticalScrollIndicator={false}
+      >
+        {posts.map((post: Post) => (
+          <PostCard
+            key={post._id}
+            post={post}
+            onLike={toggleLike}
+            onDelete={deletePost}
+            isLiked={checkIsLiked(post.likes, currentUser)}
+            currentUser={currentUser}
+            onComment={(post: Post) => setSelectedPostId(post._id)}
+          />
+        ))}
+      </ScrollView>
+      <CommentsModal
+        selectedPost={selectedPost}
+        onClose={() => setSelectedPostId(null)}
+      />
+    </>
   );
 };
 
