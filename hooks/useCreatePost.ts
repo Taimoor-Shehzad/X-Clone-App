@@ -40,8 +40,8 @@ export const useCreatePost = () => {
     onSuccess: () => {
       setContent("");
       setSelectedImage(null);
-      queryClient.invalidateQueries({ queryKey: ["post"] });
-      Alert.alert("Success", "Post Create Successfylly!");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      Alert.alert("Success", "Post created successfully!");
     },
     onError: () => {
       Alert.alert("Error", "Failed to create post, Please try again");
@@ -69,7 +69,7 @@ export const useCreatePost = () => {
     };
 
     const result = useCamera
-      ? await ImagePicker.launchCameraAsync()
+      ? await ImagePicker.launchCameraAsync(pickerOption)
       : await ImagePicker.launchImageLibraryAsync({
           ...pickerOption,
           mediaTypes: ["images"],

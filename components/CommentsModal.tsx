@@ -34,6 +34,7 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
   return (
     <Modal
       visible={!!selectedPost}
+      onRequestClose={handleClose}
       presentationStyle="pageSheet"
       animationType="slide"
       style={{
