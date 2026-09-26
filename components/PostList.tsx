@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   Modal,
+  RefreshControl,
 } from "react-native";
 import { usePosts } from "../hooks/usePosts";
 import PostCard from "./PostCard";
@@ -78,6 +79,13 @@ const PostList = () => {
       <ScrollView
         className="flex-1 w-full"
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={refetch}
+            tintColor={"#1DA1F2"}
+          />
+        }
       >
         {posts.map((post: Post) => (
           <PostCard

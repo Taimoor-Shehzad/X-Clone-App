@@ -51,5 +51,5 @@ export const commentApi = {
 export const notificationsApi = {
   getNotifications: (api: AxiosInstance) => api.get("/notifications"),
   deleteNotifications: (api: AxiosInstance, notificationId: string) =>
-    api.delete(`/notification/${notificationId}`),
+    api.delete(`/notifications/${notificationId}`),
 };
