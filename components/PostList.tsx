@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   Modal,
+  RefreshControl,
 } from "react-native";
 import { usePosts } from "../hooks/usePosts";
 import PostCard from "./PostCard";
@@ -44,14 +45,10 @@ const PostList = () => {
   if (error) {
     return (
       <View className="p-8 items-center">
-        <Text className="text-gray-500 mb-4">
-          {userUnavailable ? "Failed to load user" : "Failed to load posts"}
-        </Text>
         <TouchableOpacity
           className="bg-blue-500 px-4 py-2 rounded-lg"
           onPress={() => {
             if (error) refetch();
-            if (userUnavailable) refetchCurrentUser();
           }}
         >
           <Text className="text-white font-semibold">Retry</Text>
@@ -60,7 +57,7 @@ const PostList = () => {
     );
   }
 
-  if (isLoading || isCurrentUserLoading || !currentUser) {
+  if (isLoading || isUserLoading || !currentUser) {
     return (
       <View className="w-full items-center justify-center mt-18">
         <ActivityIndicator size="large" color="#1DA1F2" />
@@ -82,6 +79,13 @@ const PostList = () => {
       <ScrollView
         className="flex-1 w-full"
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={refetch}
+            tintColor={"#1DA1F2"}
+          />
+        }
       >
         {posts.map((post: Post) => (
           <PostCard
