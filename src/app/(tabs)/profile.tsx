@@ -5,6 +5,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
+  Modal,
+  TextInput,
 } from "react-native";
 import LogoutButton from "../../../components/LogoutButton";
 import { useCurrentUser } from "../../../hooks/useCurrentUser";
@@ -12,10 +15,19 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PostList from "../../../components/PostList";
+import { usePosts } from "../../../hooks/usePosts";
+import { useState } from "react";
+import ProfileEditModal from "../../../components/ProfileEditModal";
 
 const profile = () => {
   const { currentUser, isUserLoading } = useCurrentUser();
   const insets = useSafeAreaInsets();
+  const {
+    posts: userPosts,
+    isLoading: isUserPostsLoading,
+    refetch: refetchUserPosts,
+  } = usePosts(currentUser?.username);
+
   if (isUserLoading) {
     return (
       <View className=" bg-white flex-1 justify-center">
@@ -23,7 +35,6 @@ const profile = () => {
       </View>
     );
   }
-  console.log(currentUser);
   return (
     <View className="bg-white flex-1">
       {/* //Header */}
@@ -33,7 +44,7 @@ const profile = () => {
             {currentUser.firstName} {currentUser.lastName}
           </Text>
           <Text className="text-sm text-gray-500">
-            {currentUser.posts}3 Posts
+            {userPosts.length} Posts
           </Text>
         </View>
         <LogoutButton />
@@ -42,6 +53,13 @@ const profile = () => {
         showsVerticalScrollIndicator={false}
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 100 + insets.bottom }}
+        refreshControl={
+          <RefreshControl
+            refreshing={isUserPostsLoading}
+            onRefresh={refetchUserPosts}
+            tintColor={"#1DAF12"}
+          />
+        }
       >
         {/* Banner Image */}
         <Image
@@ -60,7 +78,12 @@ const profile = () => {
             resizeMode="cover"
             className="size-28 rounded-full border-4 border-white -mt-15"
           />
-          <TouchableOpacity className="border py-1 justify-center items-center px-6 rounded-full border-gray-200">
+          <TouchableOpacity
+            className="border py-1 justify-center items-center px-6 rounded-full border-gray-200"
+            onPress={() => {
+              // setModalVis(true);
+            }}
+          >
             <Text className="font-bold">Edit Profile</Text>
           </TouchableOpacity>
         </View>
@@ -76,12 +99,12 @@ const profile = () => {
           {/* Username */}
           <Text className="text-sm text-gray-500">@{currentUser.username}</Text>
           {/* Bio */}
-          <Text>{currentUser.bio || "React Native Developer"}</Text>
+          <Text>{currentUser.bio || "No bio set"}</Text>
           {/* Location */}
           <View className="flex-row items-center gap-1">
             <Ionicons name="location-outline" color={"#657786"} size={16} />
             <Text className="text-gray-500">
-              {currentUser.location || "Pakistan"}
+              {currentUser.location || "No location set"}
             </Text>
           </View>
           {/* Date Joined */}
@@ -94,11 +117,11 @@ const profile = () => {
           {/* Following/Follwers */}
           <View className="flex-row gap-5">
             <View className="flex-row items-center gap-1">
-              <Text className="font-bold">{currentUser.Following}0</Text>
+              <Text className="font-bold">{currentUser.Following || "0"}</Text>
               <Text className="text-gray-500">Following</Text>
             </View>
             <View className="flex-row items-center gap-1">
-              <Text className="font-bold">{currentUser.Followers}0</Text>
+              <Text className="font-bold">{currentUser.Followers || "0"}</Text>
               <Text className="text-gray-500">Followers</Text>
             </View>
           </View>
@@ -107,6 +130,7 @@ const profile = () => {
           <PostList username={currentUser?.username} />
         </View>
       </ScrollView>
+      <ProfileEditModal />
     </View>
   );
 };
