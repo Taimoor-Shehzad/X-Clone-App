@@ -16,7 +16,7 @@ import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useState } from "react";
 import CommentsModal from "./CommentsModal";
 
-const PostList = () => {
+const PostList = ({ username }: { username?: string }) => {
   const {
     posts,
     error,
@@ -25,7 +25,7 @@ const PostList = () => {
     deletePost,
     isLoading,
     checkIsLiked,
-  } = usePosts();
+  } = usePosts(username);
   const { currentUser, isUserLoading } = useCurrentUser();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 

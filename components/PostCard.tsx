@@ -50,7 +50,7 @@ const PostCard = ({
           <View className="flex-row justify-between items-center">
             <View className="flex-row gap-1 items-center">
               <Text className="text-lg font-extrabold leading-tight">
-                {displayName}
+                {post.user.firstName}
               </Text>
               <Text className="text-sm text-gray-500">
                 @{post.user.username}

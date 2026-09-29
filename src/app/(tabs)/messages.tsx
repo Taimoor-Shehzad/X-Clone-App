@@ -143,6 +143,7 @@ const messages = () => {
         visible={isChatOpen}
         animationType="slide"
         presentationStyle="pageSheet"
+        onRequestClose={closeChatModel}
         style={{
           marginTop: 70 + insets.top,
           borderTopRightRadius: 15,
