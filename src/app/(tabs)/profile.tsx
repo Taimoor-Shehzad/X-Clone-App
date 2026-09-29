@@ -16,8 +16,8 @@ import { format } from "date-fns";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PostList from "../../../components/PostList";
 import { usePosts } from "../../../hooks/usePosts";
-import { useState } from "react";
 import ProfileEditModal from "../../../components/ProfileEditModal";
+import { useProfile } from "../../../hooks/useProfile";
 
 const profile = () => {
   const { currentUser, isUserLoading } = useCurrentUser();
@@ -27,6 +27,16 @@ const profile = () => {
     isLoading: isUserPostsLoading,
     refetch: refetchUserPosts,
   } = usePosts(currentUser?.username);
+  const {
+    saveInfo,
+    updateField,
+    openEditModal,
+    isSavingInfo,
+    refetch: refetchProfile,
+    closeEditModal,
+    formData,
+    isEditingModalVisible,
+  } = useProfile();
 
   if (isUserLoading) {
     return (
@@ -56,7 +66,10 @@ const profile = () => {
         refreshControl={
           <RefreshControl
             refreshing={isUserPostsLoading}
-            onRefresh={refetchUserPosts}
+            onRefresh={() => {
+              refetchUserPosts();
+              refetchProfile();
+            }}
             tintColor={"#1DAF12"}
           />
         }
@@ -81,7 +94,7 @@ const profile = () => {
           <TouchableOpacity
             className="border py-1 justify-center items-center px-6 rounded-full border-gray-200"
             onPress={() => {
-              // setModalVis(true);
+              openEditModal();
             }}
           >
             <Text className="font-bold">Edit Profile</Text>
@@ -130,7 +143,14 @@ const profile = () => {
           <PostList username={currentUser?.username} />
         </View>
       </ScrollView>
-      <ProfileEditModal />
+      <ProfileEditModal
+        isVisible={isEditingModalVisible}
+        closeEditModal={closeEditModal}
+        saveInfo={saveInfo}
+        updateField={updateField}
+        isSaving={isSavingInfo}
+        formData={formData}
+      />
     </View>
   );
 };
