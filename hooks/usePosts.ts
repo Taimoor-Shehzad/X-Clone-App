@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { postApi, useApiClient } from "../utils/api";
+import { postApi, useApiClient, userApi } from "../utils/api";
+import { Alert } from "react-native";
 
 export const usePosts = (username?: string) => {
   const api = useApiClient();
@@ -36,6 +37,23 @@ export const usePosts = (username?: string) => {
     },
   });
 
+  const followUserMutation = useMutation({
+    mutationFn: (targetUserid: string) => userApi.followUser(api, targetUserid),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    },
+    onError: () => {
+      Alert.alert("Error", "An error occured while following the user.");
+    },
+  });
+
+  const checkIsFollowed = (postUserId: string, currentUser: any) => {
+    const isFollowed =
+      currentUser && currentUser.following.includes(postUserId);
+    return isFollowed;
+  };
+
   const checkIsLiked = (postLikes: string[], currentUser: any) => {
     const isLiked = currentUser && postLikes.includes(currentUser._id);
     return isLiked;
@@ -49,5 +67,9 @@ export const usePosts = (username?: string) => {
     toggleLike: (postId: string) => likePostMutation.mutate(postId),
     deletePost: (postId: string) => deletePostMutation.mutate(postId),
     checkIsLiked,
+    isFollowing: followUserMutation.isPending,
+    followUser: (targetUserId: string) =>
+      followUserMutation.mutate(targetUserId),
+    checkIsFollowed,
   };
 };

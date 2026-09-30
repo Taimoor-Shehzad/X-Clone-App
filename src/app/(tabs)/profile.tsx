@@ -130,11 +130,15 @@ const profile = () => {
           {/* Following/Follwers */}
           <View className="flex-row gap-5">
             <View className="flex-row items-center gap-1">
-              <Text className="font-bold">{currentUser.Following || "0"}</Text>
+              <Text className="font-bold">
+                {currentUser.following.length || "0"}
+              </Text>
               <Text className="text-gray-500">Following</Text>
             </View>
             <View className="flex-row items-center gap-1">
-              <Text className="font-bold">{currentUser.Followers || "0"}</Text>
+              <Text className="font-bold">
+                {currentUser.followers.length || "0"}
+              </Text>
               <Text className="text-gray-500">Followers</Text>
             </View>
           </View>

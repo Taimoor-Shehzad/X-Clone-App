@@ -25,6 +25,9 @@ const PostList = ({ username }: { username?: string }) => {
     deletePost,
     isLoading,
     checkIsLiked,
+    followUser,
+    isFollowing,
+    checkIsFollowed,
   } = usePosts(username);
   const { currentUser, isUserLoading } = useCurrentUser();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
@@ -94,8 +97,11 @@ const PostList = ({ username }: { username?: string }) => {
             onLike={toggleLike}
             onDelete={deletePost}
             isLiked={checkIsLiked(post.likes, currentUser)}
+            isFollowed={checkIsFollowed(post.user._id, currentUser)}
             currentUser={currentUser}
             onComment={(post: Post) => setSelectedPostId(post._id)}
+            followUser={followUser}
+            isFollowing={isFollowing}
           />
         ))}
       </ScrollView>

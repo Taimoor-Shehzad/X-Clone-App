@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Post, User } from "../types/types";
 import { formatDate, formatNumber } from "../utils/formatter";
@@ -8,8 +15,11 @@ interface PostCardProps {
   onLike: (postId: string) => void;
   onDelete: (postId: string) => void;
   isLiked?: boolean;
+  isFollowed?: boolean;
   currentUser: User;
   onComment: (post: Post) => void;
+  followUser: (targetUserId: string) => void;
+  isFollowing: boolean;
 }
 
 const PostCard = ({
@@ -19,6 +29,9 @@ const PostCard = ({
   post,
   isLiked,
   onComment,
+  followUser,
+  isFollowing,
+  isFollowed,
 }: PostCardProps) => {
   const isOwnPost = post.user._id === currentUser._id;
 
@@ -50,19 +63,34 @@ const PostCard = ({
           <View className="flex-row justify-between items-center">
             <View className="flex-row gap-1 items-center">
               <Text className="text-lg font-extrabold leading-tight">
-                {post.user.firstName}
+                {post.user.firstName.slice(0, 8)}
               </Text>
               <Text className="text-sm text-gray-500">
-                @{post.user.username}
+                @{post.user.username.slice(0, 15)}
               </Text>
               <Text className="text-sm text-gray-500"> . </Text>
               <Text className="text-sm text-gray-500">
                 {formatDate(post.createdAt)}
               </Text>
             </View>
-            {isOwnPost && (
+            {isOwnPost ? (
               <TouchableOpacity onPress={() => handleDelete()}>
                 <Ionicons name="trash" size={20} color="gray" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                className="px-4 py-1 rounded-full bg-blue-500 items-center justify-center"
+                onPress={() => {
+                  followUser(post.user._id);
+                }}
+              >
+                {isFollowed ? (
+                  <Text className="text-white text-sm">Followed</Text>
+                ) : isFollowing ? (
+                  <ActivityIndicator size={"small"} color={"white"} />
+                ) : (
+                  <Text className="text-white text-sm">Follow</Text>
+                )}
               </TouchableOpacity>
             )}
           </View>
