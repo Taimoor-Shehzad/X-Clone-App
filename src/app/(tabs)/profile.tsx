@@ -51,7 +51,7 @@ const profile = () => {
       <View className="flex-row w-full justify-between px-4 mt-6 items-center mb-4">
         <View className="items-start justify-center">
           <Text className="font-bold text-xl leading-tight">
-            {currentUser.firstName} {currentUser.lastName}
+            {currentUser.firstName}
           </Text>
           <Text className="text-sm text-gray-500">
             {userPosts.length} Posts
@@ -105,10 +105,11 @@ const profile = () => {
           {/* Name */}
           <View className="flex-row items-center gap-1">
             <Text className="text-xl font-bold">
-              {currentUser.firstName} {currentUser.lastName}
+              <Text>{currentUser.firstName}</Text>
             </Text>
             <Feather name="check-circle" size={20} color="#1DA1F2" />
           </View>
+          <Text>{currentUser.lastName}</Text>
           {/* Username */}
           <Text className="text-sm text-gray-500">@{currentUser.username}</Text>
           {/* Bio */}

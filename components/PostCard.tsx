@@ -9,6 +9,7 @@ import {
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Post, User } from "../types/types";
 import { formatDate, formatNumber } from "../utils/formatter";
+import { router } from "expo-router";
 
 interface PostCardProps {
   post: Post;
@@ -62,12 +63,40 @@ const PostCard = ({
         <View className="flex-1 justify-center">
           <View className="flex-row justify-between items-center">
             <View className="flex-row gap-1 items-center">
-              <Text className="text-lg font-extrabold leading-tight">
-                {post.user.firstName.slice(0, 8)}
-              </Text>
-              <Text className="text-sm text-gray-500">
-                @{post.user.username.slice(0, 15)}
-              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  if (isOwnPost) {
+                    router.push("/(tabs)/profile");
+                    return;
+                  }
+
+                  router.push({
+                    pathname: "/(screens)/userProfile",
+                    params: { username: post.user.username },
+                  });
+                }}
+              >
+                <Text className="text-lg font-extrabold leading-tight">
+                  {post.user.firstName.slice(0, 8)}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  if (isOwnPost) {
+                    router.push("/(tabs)/profile");
+                    return;
+                  }
+
+                  router.push({
+                    pathname: "/(screens)/userProfile",
+                    params: { username: post.user.username },
+                  });
+                }}
+              >
+                <Text className="text-sm text-gray-500">
+                  @{post.user.username.slice(0, 15)}
+                </Text>
+              </TouchableOpacity>
               <Text className="text-sm text-gray-500"> . </Text>
               <Text className="text-sm text-gray-500">
                 {formatDate(post.createdAt)}

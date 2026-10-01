@@ -2,6 +2,7 @@ import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { Notification } from "../types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { formatDate } from "../utils/formatter";
+import { router } from "expo-router";
 
 interface NotificationCardProps {
   notification: Notification;
@@ -73,11 +74,31 @@ const NotificationCard = ({
           <View className="flex-row justify-between">
             <View className="items-start flex-1 justify-center">
               <Text className="flex-row items-center justify-center">
-                <Text className="font-bold">{notification.from.firstName}</Text>
-                {"  "}
-                <Text className="text-gray-500">
-                  @{notification.from.username.slice(0, 18)}
-                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push({
+                      pathname: "/(screens)/userProfile",
+                      params: { username: notification.from.username },
+                    });
+                  }}
+                >
+                  <Text className="text-lg font-extrabold leading-tight">
+                    {notification.from.firstName}{" "}
+                    {notification.from.lastName}{" "}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push({
+                      pathname: "/(screens)/userProfile",
+                      params: { username: notification.from.username },
+                    });
+                  }}
+                >
+                  <Text className="text-sm text-gray-500">
+                    @{notification.from.username}
+                  </Text>
+                </TouchableOpacity>
               </Text>
               <Text className="flex-row items-center justify-center">
                 <Text className="text-sm">{getNotificationText()}</Text>
