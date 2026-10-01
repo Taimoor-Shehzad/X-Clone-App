@@ -76,7 +76,7 @@ const NotificationCard = ({
                 <Text className="font-bold">{notification.from.firstName}</Text>
                 {"  "}
                 <Text className="text-gray-500">
-                  @{notification.from.username}
+                  @{notification.from.username.slice(0, 18)}
                 </Text>
               </Text>
               <Text className="flex-row items-center justify-center">
