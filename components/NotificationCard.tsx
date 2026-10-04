@@ -83,22 +83,13 @@ const NotificationCard = ({
                   }}
                 >
                   <Text className="text-lg font-extrabold leading-tight">
-                    {notification.from.firstName}{" "}
-                    {notification.from.lastName}{" "}
+                    {notification.from.firstName} {notification.from.lastName}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    router.push({
-                      pathname: "/(screens)/userProfile",
-                      params: { username: notification.from.username },
-                    });
-                  }}
-                >
-                  <Text className="text-sm text-gray-500">
-                    @{notification.from.username}
-                  </Text>
-                </TouchableOpacity>
+                <Text className="text-sm text-gray-500">
+                  {" "}
+                  @{notification.from.username}
+                </Text>
               </Text>
               <Text className="flex-row items-center justify-center">
                 <Text className="text-sm">{getNotificationText()}</Text>

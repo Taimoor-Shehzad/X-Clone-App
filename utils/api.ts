@@ -33,6 +33,7 @@ export const userApi = {
     api.post(`/users/follow/${targetUserId}`),
   getTargetUserProfile: (api: AxiosInstance, username: string) =>
     api.get(`/users/profile/${username}`),
+  getUsers: (api: AxiosInstance) => api.get("/users/"),
 };
 
 export const postApi = {

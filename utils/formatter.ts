@@ -25,3 +25,28 @@ export const formatDate = (dateString: string): string => {
   if (days < 7) return `${days}d`;
   return `${Math.floor(days / 7)}w`;
 };
+
+export function timeAgo(timestamp: number): string {
+  const seconds = Math.floor((Date.now() - timestamp) / 1000);
+
+  if (seconds < 5) return "just now";
+
+  const intervals: [number, string][] = [
+    [31536000, "year"],
+    [2592000, "month"],
+    [604800, "week"],
+    [86400, "day"],
+    [3600, "hour"],
+    [60, "minute"],
+    [1, "second"],
+  ];
+
+  for (const [secondsInUnit, unit] of intervals) {
+    const count = Math.floor(seconds / secondsInUnit);
+    if (count >= 1) {
+      return `${count} ${unit}${count > 1 ? "s" : ""} ago`;
+    }
+  }
+
+  return "just now";
+}

@@ -106,12 +106,12 @@ const UserProfile = () => {
         {/* User Details */}
         <View className="px-4 mt-3 w-full gap-1 items-start">
           {/* Name */}
-          <View className="flex-row items-center gap-1">
+          <Text className="flex-row items-center gap-1">
             <Text className="text-xl font-bold">
-              {targetUser.firstName} {targetUser.lastName}
+              {targetUser.firstName} {targetUser.lastName}{" "}
             </Text>
             <Feather name="check-circle" size={20} color="#1DA1F2" />
-          </View>
+          </Text>
           {/* Username */}
           <Text className="text-sm text-gray-500">@{targetUser.username}</Text>
           {/* Bio */}
