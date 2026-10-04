@@ -50,9 +50,7 @@ const profile = () => {
   if (userLoadingError) {
     return (
       <View className="flex-1 bg-white w-full justify-center items-center gap-4 p-8">
-        <Text className="text-gray-500 text-lg">
-          Failed to load notifications
-        </Text>
+        <Text className="text-gray-500 text-lg">Failed to load posts</Text>
         <TouchableOpacity
           className="bg-blue-500 px-4 py-2 rounded-lg"
           onPress={() => {

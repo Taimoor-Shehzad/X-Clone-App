@@ -39,17 +39,15 @@ const MessageModal = ({
   const deleteMessage = useMutation(api.messages.deleteMessage);
   const { currentUser, isUserLoading } = useCurrentUser();
 
-  if (isUserLoading) {
-    return (
-      <View className=" bg-white flex-1 justify-center">
-        <ActivityIndicator size={"large"} color={"#1DA1F2"} />
-      </View>
-    );
-  }
-  const messages = useQuery(api.messages.getMessages, {
-    to: targetUser?._id || "",
-    from: currentUser._id,
-  });
+  const messages = useQuery(
+    api.messages.getMessages,
+    currentUser && targetUser
+      ? {
+          to: targetUser?._id || "",
+          from: currentUser._id,
+        }
+      : "skip",
+  );
 
   const handleDeleteMesage = (id: Id<"messages">) => {
     Alert.alert("Delete Message", "Do you want to delete this message?", [
@@ -78,12 +76,12 @@ const MessageModal = ({
         padding: 10,
       }}
     >
-      {!targetUser && (
+      {(isUserLoading || !currentUser || !targetUser) && (
         <View className="flex-1 w-full justify-center items-center p-8">
           <ActivityIndicator size={"large"} color={"#1DA1F2"} />
         </View>
       )}
-      {targetUser && (
+      {currentUser && targetUser && (
         <SafeAreaView style={{ flex: 1 }}>
           <View className="flex-row items-center gap-3 border-b border-b-gray-100 pb-4 mt-2">
             <TouchableOpacity onPress={onClose}>
