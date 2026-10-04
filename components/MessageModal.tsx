@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import {
   SafeAreaView,
@@ -20,29 +21,48 @@ import { useState } from "react";
 import { getMessages } from "../convex/messages";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { timeAgo } from "../utils/formatter";
+import { Id } from "../convex/_generated/dataModel";
+import { router } from "expo-router";
 
 interface MessageModalProps {
   isVisible: boolean;
   onClose: () => void;
-  userIds: {
-    to: string;
-    from: string;
-  };
   targetUser: User | null;
 }
 const MessageModal = ({
   isVisible,
   onClose,
-  userIds,
   targetUser,
 }: MessageModalProps) => {
   const [newMessage, setNewMessage] = useState("");
   const sendMessage = useMutation(api.messages.sendMessage);
+  const deleteMessage = useMutation(api.messages.deleteMessage);
+  const { currentUser, isUserLoading } = useCurrentUser();
+
+  if (isUserLoading) {
+    return (
+      <View className=" bg-white flex-1 justify-center">
+        <ActivityIndicator size={"large"} color={"#1DA1F2"} />
+      </View>
+    );
+  }
   const messages = useQuery(api.messages.getMessages, {
-    to: userIds.to,
-    from: userIds.from,
+    to: targetUser?._id || "",
+    from: currentUser._id,
   });
-  const { currentUser } = useCurrentUser();
+
+  const handleDeleteMesage = (id: Id<"messages">) => {
+    Alert.alert("Delete Message", "Do you want to delete this message?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => {
+          deleteMessage({ id });
+        },
+      },
+    ]);
+  };
 
   const insets = useSafeAreaInsets();
   return (
@@ -65,7 +85,7 @@ const MessageModal = ({
       )}
       {targetUser && (
         <SafeAreaView style={{ flex: 1 }}>
-          <View className="flex-row items-center gap-3 border-b border-b-gray-100 pb-4">
+          <View className="flex-row items-center gap-3 border-b border-b-gray-100 pb-4 mt-2">
             <TouchableOpacity onPress={onClose}>
               <Ionicons name="arrow-back" color="#1DA1F2" size={26} />
             </TouchableOpacity>
@@ -79,7 +99,14 @@ const MessageModal = ({
               }}
               resizeMode="cover"
             />
-            <View>
+            <TouchableOpacity
+              onPress={() => {
+                router.push({
+                  pathname: "/(screens)/userProfile",
+                  params: { username: targetUser.username },
+                });
+              }}
+            >
               <View className="justify-start">
                 <Text className="text-lg font-bold leading-tight">
                   {targetUser.firstName}
@@ -88,7 +115,7 @@ const MessageModal = ({
               <Text className="text-base text-gray-500 leading-tight justify-center items-center">
                 @{targetUser.username}
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -102,10 +129,10 @@ const MessageModal = ({
             {messages &&
               messages.map((message) => (
                 <View
-                  className={`flex-row mb-3 ${message.from === userIds.from ? "justify-end" : "justify-start"} gap-2 items-start`}
+                  className={`flex-row mb-3 ${message.from === currentUser._id ? "justify-end" : "justify-start"} gap-2 items-start`}
                   key={message._id}
                 >
-                  {message.from !== userIds.from && (
+                  {message.from !== currentUser._id && (
                     <Image
                       source={{ uri: targetUser.profilePicture }}
                       style={{
@@ -127,15 +154,31 @@ const MessageModal = ({
                           : "bg-gray-100"
                       }`}
                     >
-                      <Text
-                        className={
-                          message.from === currentUser._id
-                            ? "text-white"
-                            : "text-gray-900"
-                        }
-                      >
-                        {message.text}
-                      </Text>
+                      {message.from === currentUser._id ? (
+                        <TouchableOpacity
+                          onLongPress={() => handleDeleteMesage(message._id)}
+                        >
+                          <Text
+                            className={
+                              message.from === currentUser._id
+                                ? "text-white"
+                                : "text-gray-900"
+                            }
+                          >
+                            {message.text}
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <Text
+                          className={
+                            message.from === currentUser._id
+                              ? "text-white"
+                              : "text-gray-900"
+                          }
+                        >
+                          {message.text}
+                        </Text>
+                      )}
                     </View>
                     <Text className="text-xs text-gray-500 mt-1 mr-1">
                       {timeAgo(message._creationTime)}

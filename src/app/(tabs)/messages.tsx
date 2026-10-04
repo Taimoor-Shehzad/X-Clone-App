@@ -1,5 +1,5 @@
 import { Feather, Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -22,21 +22,15 @@ import { useMutation, useQuery } from "convex/react";
 import { User } from "../../../types/types";
 import { useCurrentUser } from "../../../hooks/useCurrentUser";
 import MessageModal from "../../../components/MessageModal";
+import UserCard from "../../../components/UserCard";
 
 const messages = () => {
   const [conversations, setConversations] = useState(CONVERSATIONS);
   const [searchText, setSearchText] = useState("");
   const [isChatOpen, setChatOpen] = useState(false);
-  // const [selectedConversation, setSelectedConversation] =
-  //   useState<null | ConversationType>(null);
-  const [userIds, setUserIds] = useState({
-    from: "",
-    to: "",
-  });
   const [targetUser, setTargetUser] = useState<User | null>(null);
-  const { currentUser } = useCurrentUser();
+  const { currentUser, isUserLoading } = useCurrentUser();
   const [newMessage, setNewMessage] = useState("");
-
   const insets = useSafeAreaInsets();
 
   const {
@@ -45,15 +39,6 @@ const messages = () => {
     error: userLoadingError,
     refetch: refetchUsers,
   } = useUsers();
-
-  if (isUsersLoading) {
-    return (
-      <View className="bg-white items-center justify-center flex-1 p-8">
-        <ActivityIndicator size={"large"} color={"#1DA1F2"} />
-        <Text className="text-lg text-gray-500">Loading Users...</Text>
-      </View>
-    );
-  }
 
   if (userLoadingError) {
     return (
@@ -73,20 +58,20 @@ const messages = () => {
     );
   }
 
-  const openChatModel = (toUserId: string, targetUser: User) => {
+  if (isUsersLoading || isUserLoading) {
+    return (
+      <View className=" bg-white flex-1 justify-center">
+        <ActivityIndicator size={"large"} color={"#1DA1F2"} />
+      </View>
+    );
+  }
+
+  const openChatModel = (targetUser: User) => {
     setChatOpen(true);
-    setUserIds({
-      to: toUserId,
-      from: currentUser._id,
-    });
     setTargetUser(targetUser);
   };
   const closeChatModel = () => {
     setChatOpen(false);
-    setUserIds({
-      to: "",
-      from: "",
-    });
   };
 
   return (
@@ -112,56 +97,12 @@ const messages = () => {
         showsVerticalScrollIndicator={false}
       >
         {Users.map((user: User) => (
-          <TouchableOpacity
-            key={user._id}
-            className="flex-row px-5 py-4 w-full gap-3 items-center border-b border-b-gray-100"
-            onPress={() => {
-              openChatModel(user._id, user);
-            }}
-            // onLongPress={() => {
-            //   deleteConversation(item.id);
-            // }}
-          >
-            <Image
-              resizeMode="cover"
-              source={{ uri: user.profilePicture }}
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-              }}
-            />
-            <View className="flex-1 justify-center">
-              <View className="flex-row justify-between items-center">
-                <Text className="flex-row gap-1 w-full items-center leading-tight">
-                  <Text className="text-lg font-bold  leading-tight">
-                    {user.firstName} {user.lastName}
-                  </Text>
-                  {/* {item.user.verified && (
-                    <Feather name="check-circle" size={16} color="#1DA1F2" />
-                  )} */}
-
-                  <Text className="text-sm text-gray-500  leading-tight">
-                    {" "}
-                    @{user.username}
-                  </Text>
-                </Text>
-                {/* <Text className="text-sm text-gray-500">{item.time}</Text> */}
-              </View>
-              <Text className="text-sm text-gray-500" numberOfLines={1}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias
-                quos, ipsam nihil tenetur voluptate architecto eum reprehenderit
-                velit quae quo deleniti debitis reiciendis tempora nesciunt
-                tempore, numquam, expedita distinctio molestiae.
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <UserCard key={user._id} user={user} openChatModel={openChatModel} />
         ))}
       </ScrollView>
       <MessageModal
         isVisible={isChatOpen}
         onClose={() => closeChatModel()}
-        userIds={userIds}
         targetUser={targetUser}
       />
     </View>
