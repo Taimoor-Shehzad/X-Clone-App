@@ -10,7 +10,10 @@ export const getMessages = query({
     const messages = await ctx.db
       .query("messages")
       .filter((q) =>
-        q.and(q.eq(q.field("to"), args.to), q.eq(q.field("from"), args.from)),
+        q.or(
+          q.and(q.eq(q.field("to"), args.to), q.eq(q.field("from"), args.from)),
+          q.and(q.eq(q.field("to"), args.from), q.eq(q.field("from"), args.to)),
+        ),
       )
       .collect();
     return messages;

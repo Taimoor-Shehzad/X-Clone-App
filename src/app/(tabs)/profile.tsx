@@ -26,6 +26,7 @@ const profile = () => {
     posts: userPosts,
     isLoading: isUserPostsLoading,
     refetch: refetchUserPosts,
+    error: userLoadingError,
   } = usePosts(currentUser?.username);
   const {
     saveInfo,
@@ -45,6 +46,25 @@ const profile = () => {
       </View>
     );
   }
+
+  if (userLoadingError) {
+    return (
+      <View className="flex-1 bg-white w-full justify-center items-center gap-4 p-8">
+        <Text className="text-gray-500 text-lg">
+          Failed to load notifications
+        </Text>
+        <TouchableOpacity
+          className="bg-blue-500 px-4 py-2 rounded-lg"
+          onPress={() => {
+            refetchUserPosts();
+          }}
+        >
+          <Text className="text-white font-semibold">Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View className="bg-white flex-1">
       {/* //Header */}
