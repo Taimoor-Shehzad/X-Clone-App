@@ -1,17 +1,23 @@
+import { Ionicons } from "@expo/vector-icons";
 import {
   View,
   Text,
   TouchableOpacity,
   Modal,
   ActivityIndicator,
+  Image,
+  TextInput,
 } from "react-native";
-import { TextInput } from "react-native";
 
 interface ProfileEditModalProps {
   isVisible: boolean;
   closeEditModal: () => void;
   saveInfo: () => void;
   isSaving: boolean;
+  profileImage: string;
+  bannerImage: string;
+  pickProfileImage: () => void;
+  pickBannerImage: () => void;
   updateField: (field: string, value: string) => void;
   formData: {
     firstName: string;
@@ -26,13 +32,13 @@ const ProfileEditModal = ({
   closeEditModal,
   saveInfo,
   isSaving,
+  profileImage,
+  bannerImage,
+  pickProfileImage,
+  pickBannerImage,
   updateField,
   formData,
 }: ProfileEditModalProps) => {
-  const handleSaveInfo = () => {
-    saveInfo();
-    closeEditModal();
-  };
   return (
     <Modal
       visible={isVisible}
@@ -48,17 +54,54 @@ const ProfileEditModal = ({
       onRequestClose={closeEditModal}
     >
       {/* Header */}
-      <View className="flex-row w-full justify-between">
+      <View className="flex-row w-full justify-between mb-10">
         <TouchableOpacity onPress={closeEditModal}>
           <Text className="text-blue-500 text-lg">Cancel</Text>
         </TouchableOpacity>
         <Text className="font-bold text-lg">Edit Profile</Text>
-        <TouchableOpacity disabled={isSaving} onPress={handleSaveInfo}>
+        <TouchableOpacity disabled={isSaving} onPress={saveInfo}>
           {isSaving ? (
             <ActivityIndicator size="small" color="#1DA1F2" />
           ) : (
             <Text className="text-blue-500 text-lg font-semibold">Save</Text>
           )}
+        </TouchableOpacity>
+      </View>
+      <View>
+        <Image
+          source={{
+            uri:
+              bannerImage ||
+              "https://static.vecteezy.com/system/resources/previews/060/844/016/non_2x/snow-capped-mountains-reflected-in-a-still-lake-hd-background-luxury-hd-wallpaper-image-popular-high-resolution-desktop-background-free-photo.jpg",
+          }}
+          resizeMode="cover"
+          className="aspect-21/9"
+        />
+        <View className="-mt-7 w-full items-end">
+          <TouchableOpacity
+            className="bg-blue-500 rounded-full p-2"
+            onPress={pickBannerImage}
+          >
+            <Ionicons name="pencil" color={"white"} size={16} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      {/* User Profile Image */}
+      <View className=" px-4 flex-row items-end">
+        <Image
+          source={{
+            uri:
+              profileImage ||
+              "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg",
+          }}
+          resizeMode="cover"
+          className="size-28 rounded-full border-4 border-white -mt-15"
+        />
+        <TouchableOpacity
+          className="bg-blue-500 rounded-full p-2 -ml-8"
+          onPress={pickProfileImage}
+        >
+          <Ionicons name="pencil" color={"white"} size={15} />
         </TouchableOpacity>
       </View>
       <View>

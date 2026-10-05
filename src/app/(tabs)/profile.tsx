@@ -32,6 +32,10 @@ const profile = () => {
     saveInfo,
     updateField,
     openEditModal,
+    pickProfileImage,
+    pickBannerImage,
+    profileImage,
+    bannerImage,
     isSavingInfo,
     refetch: refetchProfile,
     closeEditModal,
@@ -172,6 +176,10 @@ const profile = () => {
         saveInfo={saveInfo}
         updateField={updateField}
         isSaving={isSavingInfo}
+        profileImage={profileImage}
+        bannerImage={bannerImage}
+        pickProfileImage={pickProfileImage}
+        pickBannerImage={pickBannerImage}
         formData={formData}
       />
     </View>
