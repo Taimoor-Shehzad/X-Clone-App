@@ -1,56 +1,133 @@
-# Welcome to your Expo app 👋
+# X-Clone App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern social media application inspired by X (formerly Twitter), built with Expo and React Native. The app combines a polished mobile-first UI, Clerk-powered authentication, and a Convex backend to support a social networking experience.
 
-## Get started
+## Overview
 
-1. Install dependencies
+X-Clone App is designed to mimic the core flow of a social platform:
 
-   ```bash
-   npm install
-   ```
+- User sign-in and onboarding
+- Home feed and content browsing
+- Search and discovery
+- Notifications center
+- Direct message experience
+- Profile management and user information
 
-2. Start the app
+The project uses a modular structure and Expo Router for screen-based navigation, making it easy to extend with additional features like posting, following, comments, and richer media interactions.
 
-   ```bash
-   npx expo start
-   ```
+## Tech Stack
 
-In the output, you'll find options to open the app in a
+- Expo / React Native
+- TypeScript
+- Expo Router
+- NativeWind for styling
+- Clerk for authentication
+- Convex for backend data and real-time logic
+- TanStack React Query for client-side data handling
+- React Navigation and Expo UI components
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Features
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Secure authentication flow with Clerk
+- Tab-based app navigation
+- Social app screens for home, messages, notifications, profile, and search
+- Structured app layout using file-based routing
+- Responsive design suitable for mobile and web
+- Type-safe frontend architecture with TypeScript
 
-## Get a fresh project
+## Project Structure
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+X-Clone-App/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/
+│   │   ├── (screens)/
+│   │   └── (tabs)/
+│   ├── components/
+│   ├── data/
+│   ├── hooks/
+│   ├── utils/
+│   └── types/
+├── convex/
+├── assets/
+├── app.json
+├── package.json
+├── tsconfig.json
+├── global.css
+├── metro.config.js
+├── README.md
+└── LICENSE
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting Started
 
-### Other setup steps
+### Prerequisites
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+- Node.js 18+
+- npm or yarn
+- Expo CLI
+- A Clerk project
+- A Convex project
 
-## Learn more
+### 1. Clone the repository
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+git clone https://github.com/Taimoor-Shehzad/X-Clone-App.git
+cd X-Clone-App
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 2. Install dependencies
 
-## Join the community
+```bash
+npm install
+```
 
-Join our community of developers creating universal apps.
+### 3. Configure environment variables
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Create a `.env` file or configure your Expo environment with the required Clerk and Convex values used by the app.
+
+Example:
+
+```bash
+EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+EXPO_PUBLIC_CONVEX_URL=your_convex_url
+```
+
+Update the values to match your own project configuration.
+
+### 4. Start the app
+
+```bash
+npm start
+```
+
+Then run one of the following:
+
+```bash
+npm run android
+npm run ios
+npm run web
+```
+
+## Available Scripts
+
+```bash
+npm start       # Start Expo development server
+npm run android # Start Android app
+npm run ios     # Start iOS app
+npm run web     # Start web app
+npm run lint    # Run lint checks
+```
+
+## Notes
+
+This app is a full-stack social media starter built for experimentation and extension. It is structured to support features such as post creation, feeds, user profiles, and interactions while keeping the codebase easy to navigate.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## Contributing
+
+Contributions are welcome. If you want to improve the app, add features, or fix issues, feel free to open a pull request with a clear description of your changes.
