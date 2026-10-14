@@ -37,8 +37,7 @@ export const userApi = {
           bio: string;
           location: string;
         },
-  ) =>
-    api.put("/users/profile", data),
+  ) => api.put("/users/profile", data),
   followUser: (api: AxiosInstance, targetUserId: string) =>
     api.post(`/users/follow/${targetUserId}`),
   getTargetUserProfile: (api: AxiosInstance, username: string) =>
@@ -61,6 +60,8 @@ export const postApi = {
 export const commentApi = {
   createComment: (api: AxiosInstance, postId: string, content: string) =>
     api.post(`/comments/post/${postId}`, { content }),
+  deleteComment: (api: AxiosInstance, commentId: string) =>
+    api.delete(`/comments/delete/${commentId}`),
 };
 
 export const notificationsApi = {

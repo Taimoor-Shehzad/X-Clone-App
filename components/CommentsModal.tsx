@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Post } from "../types/types";
@@ -22,13 +23,29 @@ interface CommentModalProps {
 
 const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
   const insets = useSafeAreaInsets();
-  const { commentText, setCommentText, createComment, isCreatingComment } =
-    useComments();
+  const {
+    commentText,
+    setCommentText,
+    createComment,
+    isCreatingComment,
+    deleteComment,
+  } = useComments();
   const { currentUser } = useCurrentUser();
 
   const handleClose = () => {
     onClose();
     setCommentText("");
+  };
+
+  const handleDelete = (commentId: string) => {
+    Alert.alert("Delete Comment", "Are you sure you want this comment?", [
+      { text: "cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => deleteComment(commentId),
+      },
+    ]);
   };
 
   let fullName, displayName: any;
@@ -122,9 +139,14 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
               ) : (
                 selectedPost.comments.map((comment) => {
                   return (
-                    <View
+                    <TouchableOpacity
                       key={comment._id}
                       className="px-1 border-b py-3 border-b-gray-100"
+                      onLongPress={() => {
+                        if (currentUser._id == comment.user._id) {
+                          handleDelete(comment._id);
+                        }
+                      }}
                     >
                       <View className="flex-row gap-3">
                         <Image
@@ -136,7 +158,6 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
                           className="size-10 rounded-full"
                           resizeMode="cover"
                         />
-
                         <View className="flex-1 justify-center">
                           <View className="flex-row justify-between items-center">
                             <View className="flex-row gap-1 items-center">
@@ -151,15 +172,18 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
                           <Text className="mr-1">{comment.content}</Text>
                         </View>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   );
                 })
               )}
             </>
           )}
         </ScrollView>
+        <View className="py-2 justify-center items-center">
+          <Text className="text-sm">Long press to delete your comment</Text>
+        </View>
         {selectedPost && (
-          <View className="px-1 border-b py-3 border-b-gray-100 w-full">
+          <View className="px-1 border-b pb-3 border-b-gray-100 w-full">
             <View className="flex-row gap-3">
               <Image
                 source={{
@@ -168,7 +192,7 @@ const CommentsModal = ({ selectedPost, onClose }: CommentModalProps) => {
                 className="size-10 rounded-full"
                 resizeMode="cover"
               />
-              <View className="flex-1 gap-3">
+              <View className="flex-1 gap-2">
                 <TextInput
                   placeholder="Write Comment"
                   className="px-4 py-2 border rounded-lg border-gray-300"

@@ -36,10 +36,25 @@ export const useComments = () => {
     createCommentMutation.mutate({ postId, content: commentText.trim() });
   };
 
+  const deleteCommentMutation = useMutation({
+    mutationFn: (commentId: string) => commentApi.deleteComment(api, commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onError: () => {
+      Alert.alert("Error", "An error occured while deleting the comment.");
+    },
+  });
+
+  const deleteComment = (commentId: string) => {
+    deleteCommentMutation.mutate(commentId);
+  };
+
   return {
     commentText,
     setCommentText,
     createComment,
+    deleteComment,
     isCreatingComment: createCommentMutation.isPending,
   };
 };
