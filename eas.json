@@ -12,7 +12,17 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bWFqb3ItbWFjYXctMjYxMS5jbGVyay5hY2NvdW50cy5kZXYk",
+        "EXPO_PUBLIC_CONVEX_SITE_URL":"https://quirky-marmot-643.convex.site",
+        "EXPO_PUBLIC_CONVEX_URL":"https://quirky-marmot-643.convex.cloud"
+
       }
+
     },
     "production": {
       "autoIncrement": true
