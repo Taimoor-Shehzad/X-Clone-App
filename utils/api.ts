@@ -1,7 +1,8 @@
 import { useAuth } from "@clerk/expo";
 import axios, { AxiosInstance } from "axios";
 
-const API_BASE_URL = "https://x-clone-backend-coral.vercel.app/api";
+const API_BASE_URL = process.env.API_BASE_URL;
+//My Open This App In Future Check Bugs In this API_BASE_URL whether it is getting correct url or not
 
 export const createApiClient = (
   getToken: () => Promise<string | null>,
